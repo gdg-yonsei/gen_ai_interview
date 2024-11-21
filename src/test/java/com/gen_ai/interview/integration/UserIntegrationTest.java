@@ -1,6 +1,5 @@
 package com.gen_ai.interview.integration;
 
-import com.ddoddii.resume.dto.user.*;
 import com.gen_ai.interview.dto.user.*;
 import com.gen_ai.interview.repository.RefreshTokenRepository;
 import com.gen_ai.interview.repository.UserRepository;

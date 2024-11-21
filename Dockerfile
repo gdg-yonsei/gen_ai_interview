@@ -1,5 +1,5 @@
 # 1. Gradle을 사용하여 Spring Boot application 빌드
-FROM gradle:7.6-jdk-alpine AS build
+FROM --platform=linux/amd64 gradle:7.6-jdk-alpine AS build
 WORKDIR /app
 COPY . .
 #1-1. Gradle Wrapper 스크립트에 실행 권한을 부여

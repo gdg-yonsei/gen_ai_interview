@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Map port 8080 on the host to port 8080 in the container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/interview
+      SPRING_DATASOURCE_USERNAME: gen_ai
+      SPRING_DATASOURCE_PASSWORD: gen_ai
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    ports:
+      - "3306:3306" # Map port 3306 on the host to port 3306 in the container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: interview
+      MYSQL_USER: gen_ai
+      MYSQL_PASSWORD: gen_ai
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist database data
+      - ./db-scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_data:

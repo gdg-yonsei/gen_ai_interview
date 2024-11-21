@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.*;
 
-import com.ddoddii.resume.dto.user.*;
 import com.gen_ai.interview.dto.user.*;
 import com.gen_ai.interview.error.errorcode.UserErrorCode;
 import com.gen_ai.interview.error.exception.BadCredentialsException;
@@ -46,7 +45,7 @@ class UserServiceTest {
     private TokenProvider tokenProvider;
 
     @Mock
-    private RefreshTokenService refreshTokenService;
+    private RefreshTokenRepository refreshTokenService;
 
     private final String email = "abc@google.com";
     private final String password = "password1234";

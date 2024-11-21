@@ -15,7 +15,6 @@ import com.gen_ai.interview.model.eunm.RoleType;
 import com.gen_ai.interview.model.question.BehaviorQuestion;
 import com.gen_ai.interview.model.question.PersonalQuestion;
 import com.gen_ai.interview.model.question.TechQuestion;
-import com.ddoddii.resume.repository.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gen_ai.interview.repository.*;

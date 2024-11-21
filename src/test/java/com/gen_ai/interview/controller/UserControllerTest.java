@@ -1,6 +1,5 @@
 package com.gen_ai.interview.controller;
 
-import com.ddoddii.resume.dto.user.*;
 import com.gen_ai.interview.dto.user.*;
 import com.gen_ai.interview.error.errorcode.UserErrorCode;
 import com.gen_ai.interview.error.exception.DuplicateIdException;
