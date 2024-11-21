@@ -1,0 +1,133 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+group = 'com.ddoddii'
+version = '0.0.1-SNAPSHOT'
+
+
+java {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    //lombok
+    annotationProcessor 'org.projectlombok:lombok'
+    //test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test:6.2.3'
+
+    //JWT
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+    //Oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //openai api
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0-SNAPSHOT'
+    //gcloud sql
+    implementation 'com.google.cloud.sql:mysql-socket-factory:1.4.3'
+    implementation 'mysql:mysql-connector-java:8.0.30'
+
+    //test containers (https://java.testcontainers.org/)
+    testImplementation "org.testcontainers:testcontainers:1.20.1"
+    testImplementation "org.testcontainers:junit-jupiter:1.20.1"
+    testImplementation "org.testcontainers:mysql:1.20.1"
+    testImplementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    //json parser
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+    //email
+    implementation 'javax.mail:javax.mail-api:1.6.2'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    //firebase
+    implementation 'com.google.firebase:firebase-admin:8.1.0'
+    //google cloud storage
+    implementation 'com.google.cloud:google-cloud-storage:2.39.0'
+}
+
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-parameters"
+}
+
+compileJava {
+    options.compilerArgs += ['-parameters']
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs("src/main/resources")
+        }
+    }
+}
+
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+test {
+    useJUnitPlatform {
+        excludeTags 'docker-required'
+    }
+}
+
+task dockerTests(type: Test) {
+    useJUnitPlatform {
+        includeTags 'docker-required'
+    }
+}
+

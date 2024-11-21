@@ -1,0 +1,79 @@
+package com.gen_ai.interview.service;
+
+import com.gen_ai.interview.dto.ResumeDTO;
+import com.gen_ai.interview.dto.ResumeResponseDTO;
+import com.gen_ai.interview.error.errorcode.ResumeErrorCode;
+import com.gen_ai.interview.error.exception.BadCredentialsException;
+import com.gen_ai.interview.error.exception.NotExistResumeException;
+import com.gen_ai.interview.model.Resume;
+import com.gen_ai.interview.model.User;
+import com.gen_ai.interview.repository.ResumeRepository;
+import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class ResumeService {
+    private final ResumeRepository resumeRepository;
+    private final UserService userService;
+
+    // 사용자 레쥬메 업로드
+    public ResumeResponseDTO uploadResume(ResumeDTO resumeUploadRequestDTO) {
+        User user = userService.getCurrentUser();
+        log.debug("@uploadResume 현재 유저 이름 : {} ", user.getName());
+        Resume resume = Resume.builder()
+                .name(resumeUploadRequestDTO.getName())
+                .position(resumeUploadRequestDTO.getPosition())
+                .content(resumeUploadRequestDTO.getContent())
+                .isDefault(resumeUploadRequestDTO.isDefault())
+                .user(user)
+                .build();
+
+        resumeRepository.save(resume);
+
+        return ResumeResponseDTO.builder()
+                .userId(user.getId())
+                .resumeId(resume.getId())
+                .isDefault(resume.isDefault())
+                .build();
+    }
+
+    // 사용자 레쥬메 업데이트
+    public void modifyResume(long resumeId, ResumeDTO resumeModifyRequestDTO) {
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new NotExistResumeException(
+                ResumeErrorCode.NOT_EXIST_RESUME));
+        resume.setContent(resumeModifyRequestDTO.getContent());
+        resume.setPosition(resumeModifyRequestDTO.getPosition());
+        resumeRepository.save(resume);
+    }
+
+    // 사용자 레쥬메 보기
+    public List<ResumeDTO> getUserResumes() {
+        User user = userService.getCurrentUser();
+        List<Resume> resumes = resumeRepository.findByUser(user);
+        return resumes.stream()
+                .map(resume -> ResumeDTO.builder()
+                        .position(resume.getPosition())
+                        .content(resume.getContent())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    // 사용자 레쥬메 지우기
+    public void deleteResume(long resumeId) {
+        User user = userService.getCurrentUser();
+        Resume resume = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new NotExistResumeException(ResumeErrorCode.NOT_EXIST_RESUME));
+        if (resume.getUser() != user) {
+            throw new BadCredentialsException(ResumeErrorCode.NOT_RESUME_OWNER);
+        }
+        resumeRepository.delete(resume);
+    }
+
+}
