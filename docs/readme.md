@@ -1,3 +1,7 @@
+! Thanks to ddoddii ! 
+
+https://github.com/ddoddii/interview-plus-spring-server
+
 # 기능 목록
 
 ## 유저
