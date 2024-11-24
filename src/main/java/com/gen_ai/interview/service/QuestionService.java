@@ -48,7 +48,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@PropertySource("classpath:application-openai.yaml")
+@PropertySource("classpath:application-openai.properties")
 @Transactional
 @Slf4j
 public class QuestionService {

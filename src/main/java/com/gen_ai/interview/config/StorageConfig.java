@@ -13,15 +13,15 @@ import org.springframework.util.ResourceUtils;
 
 @Configuration
 public class StorageConfig {
-    @Value("${spring.cloud.gcp.storage.credentials.location}")
-    private String keyFileLocation;
-
-    @Bean
-    public Storage storage() throws IOException {
-        InputStream keyFile = ResourceUtils.getURL(keyFileLocation).openStream();
-        return StorageOptions.newBuilder()
-                .setCredentials(GoogleCredentials.fromStream(keyFile))
-                .build()
-                .getService();
-    }
+//    @Value("${spring.cloud.gcp.storage.credentials.location}")
+//    private String keyFileLocation;
+//
+//    @Bean
+//    public Storage storage() throws IOException {
+//        InputStream keyFile = ResourceUtils.getURL(keyFileLocation).openStream();
+//        return StorageOptions.newBuilder()
+//                .setCredentials(GoogleCredentials.fromStream(keyFile))
+//                .build()
+//                .getService();
+//    }
 }
